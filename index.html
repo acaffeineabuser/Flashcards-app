@@ -7,73 +7,117 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Flashcards</h1>
+  <div class="app">
 
-    <div class="deck-bar">
-      <select id="deckSelect" aria-label="Choose deck"></select>
-      <button id="newDeckBtn" type="button">New deck</button>
-      <button id="renameDeckBtn" type="button">Rename</button>
-      <button id="deleteDeckBtn" type="button" class="danger">Delete</button>
-    </div>
-
-    <nav>
-      <button id="tabStudy" type="button" class="tab active">Study</button>
-      <button id="tabManage" type="button" class="tab">Cards</button>
-    </nav>
-  </header>
-
-  <main>
-    <!-- STUDY VIEW -->
-    <section id="studyView">
-      <div class="study-options">
-        <label><input type="checkbox" id="shuffleBox" checked> Shuffle</label>
-        <button id="restartBtn" type="button">Restart</button>
+    <!-- SIDEBAR: folders and decks -->
+    <aside class="sidebar" id="sidebar" aria-label="Folders and decks">
+      <div class="sidebar-head">
+        <h1>Flashcards</h1>
+        <button id="newFolderBtn" type="button" class="btn small">New folder</button>
       </div>
 
-      <div id="progress" class="progress"></div>
+      <nav id="folderTree" class="tree" aria-label="Folders"></nav>
 
-      <div id="card" class="card" tabindex="0" role="button" aria-label="Flashcard. Click to flip.">
-        <div id="cardLabel" class="card-label"></div>
-        <div id="cardText" class="card-text"></div>
-      </div>
-
-      <div id="studyButtons" class="study-buttons">
-        <button id="flipBtn" type="button" class="primary">Flip</button>
-        <button id="againBtn" type="button" class="danger hidden">Again</button>
-        <button id="gotItBtn" type="button" class="good hidden">Got it</button>
-      </div>
-
-      <p class="hint">Shortcuts: Space = flip, Left arrow = Again, Right arrow = Got it</p>
-    </section>
-
-    <!-- MANAGE VIEW -->
-    <section id="manageView" class="hidden">
-      <form id="cardForm">
-        <label for="frontInput">Front</label>
-        <textarea id="frontInput" rows="3" required></textarea>
-
-        <label for="backInput">Back</label>
-        <textarea id="backInput" rows="3" required></textarea>
-
-        <div class="form-buttons">
-          <button type="submit" id="saveCardBtn" class="primary">Add card</button>
-          <button type="button" id="cancelEditBtn" class="hidden">Cancel edit</button>
+      <div class="sidebar-foot">
+        <div class="foot-buttons">
+          <button id="exportBtn" type="button" class="btn small">Export</button>
+          <button id="importBtn" type="button" class="btn small">Import</button>
         </div>
-      </form>
-
-      <h2 id="cardCount"></h2>
-      <ul id="cardList" class="card-list"></ul>
-
-      <div class="backup">
-        <h2>Backup</h2>
-        <p class="hint">Your cards are saved in this browser only. Export a backup file to move them to another device.</p>
-        <button id="exportBtn" type="button">Export</button>
-        <button id="importBtn" type="button">Import</button>
+        <p class="foot-hint">Cards are saved in this browser. Export a backup to keep them safe or move them to another device.</p>
         <input type="file" id="importFile" accept="application/json,.json" class="hidden">
       </div>
-    </section>
-  </main>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+      <div class="page">
+        <header class="topbar">
+          <button id="menuBtn" type="button" class="icon-btn menu-btn" aria-label="Open folders">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h2 id="deckTitle" class="deck-title"></h2>
+          <label id="moveWrap" class="move">
+            <span>Folder</span>
+            <select id="moveSelect"></select>
+          </label>
+        </header>
+
+        <main>
+          <!-- Shown when no deck is selected -->
+          <section id="emptyState" class="empty hidden">
+            <h3 id="emptyTitle"></h3>
+            <p id="emptyText"></p>
+            <button id="emptyBtn" type="button" class="btn primary"></button>
+          </section>
+
+          <!-- Shown when a deck is selected -->
+          <div id="deckView" class="hidden">
+            <div class="tabs">
+              <button id="tabStudy" type="button" class="tab active">Study</button>
+              <button id="tabManage" type="button" class="tab">Cards</button>
+            </div>
+
+            <!-- STUDY -->
+            <section id="studyView">
+              <div class="study-options">
+                <label class="check"><input type="checkbox" id="shuffleBox" checked> Shuffle</label>
+                <button id="restartBtn" type="button" class="btn small">Restart</button>
+              </div>
+
+              <div id="progress" class="progress-text"></div>
+              <div class="bar" aria-hidden="true"><div id="barFill"></div></div>
+
+              <div id="card" class="card" tabindex="0" role="button" aria-label="Flashcard. Press to flip.">
+                <div class="card-head"><span id="cardLabel"></span></div>
+                <div class="card-body"><div id="cardText" class="card-text"></div></div>
+              </div>
+
+              <div class="study-buttons">
+                <button id="flipBtn" type="button" class="btn primary">Flip card</button>
+                <button id="againBtn" type="button" class="btn danger-solid hidden">Again</button>
+                <button id="gotItBtn" type="button" class="btn good hidden">Got it</button>
+              </div>
+
+              <p class="hint">Keyboard: Space flips, Left arrow is Again, Right arrow is Got it.</p>
+            </section>
+
+            <!-- CARDS -->
+            <section id="manageView" class="hidden">
+              <form id="cardForm">
+                <label for="frontInput">Front</label>
+                <textarea id="frontInput" rows="3" required></textarea>
+
+                <label for="backInput">Back</label>
+                <textarea id="backInput" rows="3" required></textarea>
+
+                <div class="form-buttons">
+                  <button type="submit" id="saveCardBtn" class="btn primary">Add card</button>
+                  <button type="button" id="cancelEditBtn" class="btn hidden">Cancel</button>
+                </div>
+              </form>
+
+              <h3 id="cardCount" class="list-title"></h3>
+              <ul id="cardList" class="card-list"></ul>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared dialog for naming and confirming -->
+  <dialog id="dialog" aria-labelledby="dialogTitle">
+    <form id="dialogForm">
+      <h3 id="dialogTitle"></h3>
+      <p id="dialogMessage" class="hidden"></p>
+      <input type="text" id="dialogInput" class="hidden" maxlength="80" autocomplete="off">
+      <div class="dialog-buttons">
+        <button type="button" id="dialogCancel" class="btn">Cancel</button>
+        <button type="submit" id="dialogOk" class="btn primary">OK</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="script.js"></script>
 </body>
