@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flashcards</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Flashcards</h1>
+
+    <div class="deck-bar">
+      <select id="deckSelect" aria-label="Choose deck"></select>
+      <button id="newDeckBtn" type="button">New deck</button>
+      <button id="renameDeckBtn" type="button">Rename</button>
+      <button id="deleteDeckBtn" type="button" class="danger">Delete</button>
+    </div>
+
+    <nav>
+      <button id="tabStudy" type="button" class="tab active">Study</button>
+      <button id="tabManage" type="button" class="tab">Cards</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- STUDY VIEW -->
+    <section id="studyView">
+      <div class="study-options">
+        <label><input type="checkbox" id="shuffleBox" checked> Shuffle</label>
+        <button id="restartBtn" type="button">Restart</button>
+      </div>
+
+      <div id="progress" class="progress"></div>
+
+      <div id="card" class="card" tabindex="0" role="button" aria-label="Flashcard. Click to flip.">
+        <div id="cardLabel" class="card-label"></div>
+        <div id="cardText" class="card-text"></div>
+      </div>
+
+      <div id="studyButtons" class="study-buttons">
+        <button id="flipBtn" type="button" class="primary">Flip</button>
+        <button id="againBtn" type="button" class="danger hidden">Again</button>
+        <button id="gotItBtn" type="button" class="good hidden">Got it</button>
+      </div>
+
+      <p class="hint">Shortcuts: Space = flip, Left arrow = Again, Right arrow = Got it</p>
+    </section>
+
+    <!-- MANAGE VIEW -->
+    <section id="manageView" class="hidden">
+      <form id="cardForm">
+        <label for="frontInput">Front</label>
+        <textarea id="frontInput" rows="3" required></textarea>
+
+        <label for="backInput">Back</label>
+        <textarea id="backInput" rows="3" required></textarea>
+
+        <div class="form-buttons">
+          <button type="submit" id="saveCardBtn" class="primary">Add card</button>
+          <button type="button" id="cancelEditBtn" class="hidden">Cancel edit</button>
+        </div>
+      </form>
+
+      <h2 id="cardCount"></h2>
+      <ul id="cardList" class="card-list"></ul>
+
+      <div class="backup">
+        <h2>Backup</h2>
+        <p class="hint">Your cards are saved in this browser only. Export a backup file to move them to another device.</p>
+        <button id="exportBtn" type="button">Export</button>
+        <button id="importBtn" type="button">Import</button>
+        <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
